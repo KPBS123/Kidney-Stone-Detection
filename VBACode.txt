@@ -1,0 +1,93 @@
+Const ppLayoutTitle As Integer = 1
+Const ppLayoutText As Integer = 2
+
+Sub KidneyStoneDetection()
+    Dim pptApp As Object
+    Dim pptPres As Object
+    Dim slideIndex As Integer
+    
+    On Error Resume Next ' Enable error handling
+    
+    ' Create a new instance of PowerPoint application
+    Set pptApp = CreateObject("PowerPoint.Application")
+    pptApp.Visible = True
+    
+    ' Create a new presentation
+    Set pptPres = pptApp.Presentations.Add
+    
+    ' Add slides
+    slideIndex = 0 ' Reset slide index
+    
+    ' Define color palette
+    Dim titleColor As Long
+    Dim contentColor As Long
+    titleColor = RGB(128, 0, 128) ' Purple
+    contentColor = RGB(0, 102, 204) ' Blue
+    
+    ' Add title slide with colorful text
+    slideIndex = AddSlideWithTitle(pptPres, slideIndex, "Kidney Stone Detection", "Using Faster RCNN(ResNet)", titleColor)
+    
+    ' Add abstract slide with colorful text
+    slideIndex = AddSlideWithText(pptPres, slideIndex, "Abstract", _
+                                  "An automated system for kidney stone detection using deep learning techniques achieves 96.82% accuracy on CT images. This project aims to streamline diagnosis and improve patient outcomes.", contentColor)
+    
+    ' Add introduction slide with colorful text
+    slideIndex = AddSlideWithText(pptPres, slideIndex, "Introduction", _
+                                  "The project utilizes Faster RCNN (ResNet) for kidney stone detection from CT scan images. The dataset is prepared, and a custom dataset class is implemented for model training and evaluation.", contentColor)
+    
+    ' Add methodology slide with colorful text
+    slideIndex = AddSlideWithText(pptPres, slideIndex, "Methodology", _
+                                  "The YOLO darknet normalized labels are converted to COCO format for bounding box annotations. The dataset is split into training and validation sets. The Faster RCNN model is fine-tuned using transfer learning on the dataset.", contentColor)
+    
+    ' Add algorithm slide with colorful text
+    slideIndex = AddSlideWithText(pptPres, slideIndex, "Algorithm", _
+                                  "The Faster RCNN model is trained using the training set, optimizing for object detection accuracy. The training process involves forward and backward passes, updating model parameters using SGD optimizer.", contentColor)
+    
+    ' Add model usage slide with colorful text
+    slideIndex = AddSlideWithText(pptPres, slideIndex, "Model Usage", _
+                                  "The trained model is utilized for predicting kidney stones in CT scan images. Detection results are visualized using bounding boxes drawn around detected objects.", contentColor)
+    
+    ' Add technologies slide with colorful text
+    slideIndex = AddSlideWithText(pptPres, slideIndex, "Technologies Used", _
+                                  "Python" & vbCrLf & _
+                                  "PyTorch" & vbCrLf & _
+                                  "FastRCNN" & vbCrLf & _
+                                  "ResNet" & vbCrLf & _
+                                  "OpenCV", contentColor)
+    
+    ' Add conclusion slide with colorful text
+    slideIndex = AddSlideWithText(pptPres, slideIndex, "Conclusion", _
+                                  "The project successfully demonstrates the feasibility of using deep learning for kidney stone detection. Further refinements and optimizations can enhance model performance and clinical applicability.", contentColor)
+    
+    ' Clean up
+    Set pptPres = Nothing
+    Set pptApp = Nothing
+End Sub
+
+Function AddSlideWithTitle(pptPres As Object, slideIndex As Integer, titleText As String, subTitleText As String, titleColor As Long) As Integer
+    slideIndex = slideIndex + 1
+    With pptPres.Slides.Add(slideIndex, ppLayoutTitle)
+        .Shapes(1).TextFrame.TextRange.Text = titleText
+        .Shapes(1).TextFrame.TextRange.Font.Color = titleColor
+        .Shapes(1).TextFrame.TextRange.Font.Size = 32 ' Adjust font size
+        .Shapes(2).TextFrame.TextRange.Text = subTitleText
+        .Shapes(2).TextFrame.TextRange.Font.Color = titleColor
+        .Shapes(2).TextFrame.TextRange.Font.Size = 28 ' Adjust font size
+    End With
+    AddSlideWithTitle = slideIndex
+End Function
+
+Function AddSlideWithText(pptPres As Object, slideIndex As Integer, titleText As String, bodyText As String, contentColor As Long) As Integer
+    slideIndex = slideIndex + 1
+    With pptPres.Slides.Add(slideIndex, ppLayoutText)
+        .Shapes(1).TextFrame.TextRange.Text = titleText
+        .Shapes(1).TextFrame.TextRange.Font.Color = contentColor
+        .Shapes(1).TextFrame.TextRange.Font.Size = 28 ' Adjust font size
+        .Shapes(2).TextFrame.TextRange.Text = bodyText
+        .Shapes(2).TextFrame.TextRange.Font.Color = contentColor
+        .Shapes(2).TextFrame.TextRange.Font.Size = 24 ' Adjust font size
+    End With
+    AddSlideWithText = slideIndex
+End Function
+
+
